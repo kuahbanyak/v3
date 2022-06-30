@@ -1,5 +1,3 @@
-
-
 using CleanArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,7 +11,7 @@ public class MobilConfiguratuin : IEntityTypeConfiguration<Mobil>
         builder.Property(d => d.Merk)
         .HasMaxLength(20)
         .IsRequired();
-        
+
         builder.Property(d =>d.Lokasi)
         .HasMaxLength(20)
         .IsRequired();
