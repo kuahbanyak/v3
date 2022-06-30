@@ -9,5 +9,13 @@ public interface IApplicationDbContext
 
     DbSet<TodoItem> TodoItems { get; }
 
+    DbSet<Kategori> Kategoris {get;}
+
+    DbSet<Mobil>Mobils {get;}
+
+    DbSet<Detail>Details{get;}
+
+    DbSet<Account>Accounts {get;}
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

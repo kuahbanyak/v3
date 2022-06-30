@@ -31,6 +31,13 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
 
+    public DbSet<Kategori> Kategoris => Set<Kategori>();
+
+    public DbSet<Mobil>Mobils => Set<Mobil>();
+
+    public DbSet<Detail>Details => Set<Detail>();
+
+    public DbSet<Account>Accounts =>Set<Account>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
