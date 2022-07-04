@@ -12,7 +12,7 @@ public class Mobil
 
     public string Lokasi {get; set;}
 
-    public Kategori Kategori {get;set;}
+    public Kategoriku Kategoriku {get;set;}
 
     public int KategoriId   {get;set;}
 

@@ -6,6 +6,105 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Details": {
+      "post": {
+        "tags": [
+          "Details"
+        ],
+        "operationId": "Details_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDetailCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Kategori": {
+      "post": {
+        "tags": [
+          "Kategori"
+        ],
+        "operationId": "Kategori_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKategoriCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Mobils": {
+      "post": {
+        "tags": [
+          "Mobils"
+        ],
+        "operationId": "Mobils_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMobilCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -440,6 +539,79 @@
   },
   "components": {
     "schemas": {
+      "CreateDetailCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "jenisBahanBakar": {
+            "type": "string",
+            "nullable": true
+          },
+          "jumlahTempatDuduk": {
+            "type": "string",
+            "nullable": true
+          },
+          "kunciCadangan": {
+            "type": "string",
+            "nullable": true
+          },
+          "garansiPabrik": {
+            "type": "string",
+            "nullable": true
+          },
+          "tanggalRegistrasi": {
+            "type": "string"
+          },
+          "warna": {
+            "type": "string",
+            "nullable": true
+          },
+          "bukuServis": {
+            "type": "string",
+            "nullable": true
+          },
+          "masaBerlakuStnk": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateKategoriCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nama": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateMobilCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "merk": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lokasi": {
+            "type": "string",
+            "nullable": true
+          },
+          "kategoriId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detailId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "PaginatedListOfTodoItemBriefDto": {
         "type": "object",
         "additionalProperties": false,

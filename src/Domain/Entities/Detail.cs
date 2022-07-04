@@ -22,4 +22,6 @@ public class Detail
     public string BukuServis {get; set;}
 
     public string MasaBerlakuStnk {get; set;}
+
+    public List<Mobil> Mobil {get;set;}
 }

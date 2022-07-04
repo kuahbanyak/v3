@@ -15,6 +15,219 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IDetailsClient {
+    create(command: CreateDetailCommand): Observable<number>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class DetailsClient implements IDetailsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    create(command: CreateDetailCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Details";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface IKategoriClient {
+    create(command: CreateKategoriCommand): Observable<number>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class KategoriClient implements IKategoriClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    create(command: CreateKategoriCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Kategori";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface IMobilsClient {
+    create(command: CreateMobilCommand): Observable<string>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MobilsClient implements IMobilsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    create(command: CreateMobilCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/Mobils";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ITodoItemsClient {
     getTodoItemsWithPagination(listId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfTodoItemBriefDto>;
     create(command: CreateTodoItemCommand): Observable<number>;
@@ -651,6 +864,158 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf(null as any);
     }
+}
+
+export class CreateDetailCommand implements ICreateDetailCommand {
+    jenisBahanBakar?: string | undefined;
+    jumlahTempatDuduk?: string | undefined;
+    kunciCadangan?: string | undefined;
+    garansiPabrik?: string | undefined;
+    tanggalRegistrasi?: string;
+    warna?: string | undefined;
+    bukuServis?: string | undefined;
+    masaBerlakuStnk?: string | undefined;
+
+    constructor(data?: ICreateDetailCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.jenisBahanBakar = _data["jenisBahanBakar"];
+            this.jumlahTempatDuduk = _data["jumlahTempatDuduk"];
+            this.kunciCadangan = _data["kunciCadangan"];
+            this.garansiPabrik = _data["garansiPabrik"];
+            this.tanggalRegistrasi = _data["tanggalRegistrasi"];
+            this.warna = _data["warna"];
+            this.bukuServis = _data["bukuServis"];
+            this.masaBerlakuStnk = _data["masaBerlakuStnk"];
+        }
+    }
+
+    static fromJS(data: any): CreateDetailCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDetailCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["jenisBahanBakar"] = this.jenisBahanBakar;
+        data["jumlahTempatDuduk"] = this.jumlahTempatDuduk;
+        data["kunciCadangan"] = this.kunciCadangan;
+        data["garansiPabrik"] = this.garansiPabrik;
+        data["tanggalRegistrasi"] = this.tanggalRegistrasi;
+        data["warna"] = this.warna;
+        data["bukuServis"] = this.bukuServis;
+        data["masaBerlakuStnk"] = this.masaBerlakuStnk;
+        return data;
+    }
+}
+
+export interface ICreateDetailCommand {
+    jenisBahanBakar?: string | undefined;
+    jumlahTempatDuduk?: string | undefined;
+    kunciCadangan?: string | undefined;
+    garansiPabrik?: string | undefined;
+    tanggalRegistrasi?: string;
+    warna?: string | undefined;
+    bukuServis?: string | undefined;
+    masaBerlakuStnk?: string | undefined;
+}
+
+export class CreateKategoriCommand implements ICreateKategoriCommand {
+    nama?: string | undefined;
+
+    constructor(data?: ICreateKategoriCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nama = _data["nama"];
+        }
+    }
+
+    static fromJS(data: any): CreateKategoriCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateKategoriCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nama"] = this.nama;
+        return data;
+    }
+}
+
+export interface ICreateKategoriCommand {
+    nama?: string | undefined;
+}
+
+export class CreateMobilCommand implements ICreateMobilCommand {
+    merk?: string | undefined;
+    price?: number;
+    lokasi?: string | undefined;
+    kategoriId?: number;
+    detailId?: number;
+
+    constructor(data?: ICreateMobilCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.merk = _data["merk"];
+            this.price = _data["price"];
+            this.lokasi = _data["lokasi"];
+            this.kategoriId = _data["kategoriId"];
+            this.detailId = _data["detailId"];
+        }
+    }
+
+    static fromJS(data: any): CreateMobilCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateMobilCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["merk"] = this.merk;
+        data["price"] = this.price;
+        data["lokasi"] = this.lokasi;
+        data["kategoriId"] = this.kategoriId;
+        data["detailId"] = this.detailId;
+        return data;
+    }
+}
+
+export interface ICreateMobilCommand {
+    merk?: string | undefined;
+    price?: number;
+    lokasi?: string | undefined;
+    kategoriId?: number;
+    detailId?: number;
 }
 
 export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItemBriefDto {
