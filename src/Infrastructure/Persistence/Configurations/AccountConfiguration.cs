@@ -1,4 +1,4 @@
-
+/* 
 using System.Security.Cryptography.X509Certificates;
 using CleanArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,4 +14,4 @@ public  class AccountConfiguration : IEntityTypeConfiguration<Account>
         .HasMaxLength(40)
         .IsRequired();
     }
-}
+} */

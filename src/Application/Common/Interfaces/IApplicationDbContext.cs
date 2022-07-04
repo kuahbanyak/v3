@@ -15,7 +15,6 @@ public interface IApplicationDbContext
 
     DbSet<Detail>Details{get;}
 
-    DbSet<Account>Accounts {get;}
 
     /* DbSet<MarkDto>MarkDtos {get;}
  */

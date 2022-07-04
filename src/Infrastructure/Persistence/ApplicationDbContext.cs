@@ -37,8 +37,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<Detail>Details => Set<Detail>();
 
-    public DbSet<Account>Accounts =>Set<Account>();
-
    /*  public DbSet<MarkDto>MarkDtos => Set<MarkDto>(); */
     protected override void OnModelCreating(ModelBuilder builder)
     {
