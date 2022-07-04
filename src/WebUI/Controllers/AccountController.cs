@@ -26,15 +26,16 @@ public class AccountsController : ApiControllerBase
     [HttpPost("Login")]
     public async Task<ActionResult<string>>Login (MarkDto request)
     {
-        if(account.UserName != request.UserName)
+        if (account.UserName != request.UserName)
         {
             return BadRequest("Not");
         }
         return Ok("NBC");
-        if(!VerifyPasswordHash(request.Password, account.PasswordHash, account.PasswordSalt))
+        if (!VerifyPasswordHash(request.Password, account.PasswordHash, account.PasswordSalt))
         {
             return BadRequest("wrong");
         }
+        return Ok("DOne");
     }
     
     private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
