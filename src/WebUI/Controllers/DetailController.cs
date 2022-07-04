@@ -1,5 +1,5 @@
 
-using CleanArchitecture.Application.Details.Commands.CreateDetail;
+using CleanArchitecture.Application.Details.Commands.CreateDetail;  
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.WebUI.Controllers;

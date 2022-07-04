@@ -39,7 +39,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<Account>Accounts =>Set<Account>();
 
-    public DbSet<MarkDto>MarkDtos => Set<MarkDto>();
+   /*  public DbSet<MarkDto>MarkDtos => Set<MarkDto>(); */
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

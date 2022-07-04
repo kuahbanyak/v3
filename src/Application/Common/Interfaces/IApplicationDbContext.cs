@@ -17,7 +17,7 @@ public interface IApplicationDbContext
 
     DbSet<Account>Accounts {get;}
 
-    DbSet<MarkDto>MarkDtos {get;}
-
+    /* DbSet<MarkDto>MarkDtos {get;}
+ */
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
