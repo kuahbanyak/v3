@@ -6,6 +6,7 @@ using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using MediatR;
 
+namespace CleanArchitecture.Application.Details.Commands.UpdateDetail;
 public class UpdateDetailCommand : IRequest
 {
     public int Id { get; set; }
