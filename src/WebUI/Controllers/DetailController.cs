@@ -15,6 +15,7 @@ public class DetailsController : ApiControllerBase
     {
         return await Mediator.Send(command);
     }
+
     [HttpGet]
     public async Task<ActionResult> Get()
     {
@@ -22,6 +23,7 @@ public class DetailsController : ApiControllerBase
         return Ok(Details);
 
     }
+
     [HttpPut("{id}")]
     public async Task<ActionResult> Update(int id, UpdateDetailCommand command)
     {
@@ -34,6 +36,7 @@ public class DetailsController : ApiControllerBase
 
         return NoContent();
     }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
