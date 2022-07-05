@@ -1,4 +1,7 @@
+using System.Text;
 using CleanArchitecture.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebUIServices();
+builder.Services.AddAuthentication(
+    JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+
+        };
+    });
 
 var app = builder.Build();
 
@@ -41,7 +56,7 @@ app.UseSwaggerUi3(settings =>
 
 app.UseRouting();
 
-app.UseAuthentication();
+
 app.UseIdentityServer();
 app.UseAuthorization();
 
@@ -53,7 +68,7 @@ app.MapRazorPages();
 
 app.MapFallbackToFile("index.html"); ;
 
-app.Run();
+app.Run();  
 
 // Make the implicit Program class public so test projects can access it
 public partial class Program { }
