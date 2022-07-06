@@ -200,18 +200,18 @@
         }
       }
     },
-    "/api/Pengguna/Register": {
+    "/api/Penggunas/Register": {
       "post": {
         "tags": [
-          "Pengguna"
+          "Penggunas"
         ],
-        "operationId": "Pengguna_Register",
+        "operationId": "Penggunas_Register",
         "requestBody": {
           "x-name": "request",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PenggunaDto"
+                "$ref": "#/components/schemas/PenggunaRegister"
               }
             }
           },
@@ -222,9 +222,10 @@
           "200": {
             "description": "",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pengguna"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -232,18 +233,18 @@
         }
       }
     },
-    "/api/Pengguna/Login": {
+    "/api/Penggunas/Login": {
       "post": {
         "tags": [
-          "Pengguna"
+          "Penggunas"
         ],
-        "operationId": "Pengguna_Login",
+        "operationId": "Penggunas_Login",
         "requestBody": {
           "x-name": "request",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PenggunaDto"
+                "$ref": "#/components/schemas/PenggunaLogin"
               }
             }
           },
@@ -254,9 +255,10 @@
           "200": {
             "description": "",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -813,32 +815,49 @@
           }
         }
       },
-      "Pengguna": {
+      "PenggunaRegister": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "email",
+          "password",
+          "confirmPassword"
+        ],
         "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6
+          },
+          "confirmPassword": {
+            "type": "string",
+            "minLength": 1
+          },
           "userName": {
             "type": "string"
-          },
-          "passwordHash": {
-            "type": "string",
-            "format": "byte"
-          },
-          "passwordSalt": {
-            "type": "string",
-            "format": "byte"
           }
         }
       },
-      "PenggunaDto": {
+      "PenggunaLogin": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
-          "userName": {
-            "type": "string"
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "minLength": 6
           }
         }
       },

@@ -379,15 +379,15 @@ export class MobilsClient implements IMobilsClient {
     }
 }
 
-export interface IPenggunaClient {
-    register(request: PenggunaDto): Observable<Pengguna>;
-    login(request: PenggunaDto): Observable<string>;
+export interface IPenggunasClient {
+    register(request: PenggunaRegister): Observable<FileResponse>;
+    login(request: PenggunaLogin): Observable<FileResponse>;
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class PenggunaClient implements IPenggunaClient {
+export class PenggunasClient implements IPenggunasClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -397,8 +397,8 @@ export class PenggunaClient implements IPenggunaClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    register(request: PenggunaDto): Observable<Pengguna> {
-        let url_ = this.baseUrl + "/api/Pengguna/Register";
+    register(request: PenggunaRegister): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Penggunas/Register";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -409,7 +409,7 @@ export class PenggunaClient implements IPenggunaClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/octet-stream"
             })
         };
 
@@ -420,27 +420,25 @@ export class PenggunaClient implements IPenggunaClient {
                 try {
                     return this.processRegister(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Pengguna>;
+                    return _observableThrow(e) as any as Observable<FileResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Pengguna>;
+                return _observableThrow(response_) as any as Observable<FileResponse>;
         }));
     }
 
-    protected processRegister(response: HttpResponseBase): Observable<Pengguna> {
+    protected processRegister(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Pengguna.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -449,8 +447,8 @@ export class PenggunaClient implements IPenggunaClient {
         return _observableOf(null as any);
     }
 
-    login(request: PenggunaDto): Observable<string> {
-        let url_ = this.baseUrl + "/api/Pengguna/Login";
+    login(request: PenggunaLogin): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Penggunas/Login";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -461,7 +459,7 @@ export class PenggunaClient implements IPenggunaClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/octet-stream"
             })
         };
 
@@ -472,28 +470,25 @@ export class PenggunaClient implements IPenggunaClient {
                 try {
                     return this.processLogin(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<string>;
+                    return _observableThrow(e) as any as Observable<FileResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<string>;
+                return _observableThrow(response_) as any as Observable<FileResponse>;
         }));
     }
 
-    protected processLogin(response: HttpResponseBase): Observable<string> {
+    protected processLogin(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return _observableOf(result200);
-            }));
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1361,12 +1356,13 @@ export interface ICreateMobilCommand {
     detailId?: number;
 }
 
-export class Pengguna implements IPengguna {
+export class PenggunaRegister implements IPenggunaRegister {
+    email!: string;
+    password!: string;
+    confirmPassword!: string;
     userName?: string;
-    passwordHash?: string;
-    passwordSalt?: string;
 
-    constructor(data?: IPengguna) {
+    constructor(data?: IPenggunaRegister) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1377,39 +1373,42 @@ export class Pengguna implements IPengguna {
 
     init(_data?: any) {
         if (_data) {
+            this.email = _data["email"];
+            this.password = _data["password"];
+            this.confirmPassword = _data["confirmPassword"];
             this.userName = _data["userName"];
-            this.passwordHash = _data["passwordHash"];
-            this.passwordSalt = _data["passwordSalt"];
         }
     }
 
-    static fromJS(data: any): Pengguna {
+    static fromJS(data: any): PenggunaRegister {
         data = typeof data === 'object' ? data : {};
-        let result = new Pengguna();
+        let result = new PenggunaRegister();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        data["confirmPassword"] = this.confirmPassword;
         data["userName"] = this.userName;
-        data["passwordHash"] = this.passwordHash;
-        data["passwordSalt"] = this.passwordSalt;
         return data;
     }
 }
 
-export interface IPengguna {
+export interface IPenggunaRegister {
+    email: string;
+    password: string;
+    confirmPassword: string;
     userName?: string;
-    passwordHash?: string;
-    passwordSalt?: string;
 }
 
-export class PenggunaDto implements IPenggunaDto {
-    userName?: string;
-    password?: string;
+export class PenggunaLogin implements IPenggunaLogin {
+    email!: string;
+    password!: string;
 
-    constructor(data?: IPenggunaDto) {
+    constructor(data?: IPenggunaLogin) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1420,29 +1419,29 @@ export class PenggunaDto implements IPenggunaDto {
 
     init(_data?: any) {
         if (_data) {
-            this.userName = _data["userName"];
+            this.email = _data["email"];
             this.password = _data["password"];
         }
     }
 
-    static fromJS(data: any): PenggunaDto {
+    static fromJS(data: any): PenggunaLogin {
         data = typeof data === 'object' ? data : {};
-        let result = new PenggunaDto();
+        let result = new PenggunaLogin();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["userName"] = this.userName;
+        data["email"] = this.email;
         data["password"] = this.password;
         return data;
     }
 }
 
-export interface IPenggunaDto {
-    userName?: string;
-    password?: string;
+export interface IPenggunaLogin {
+    email: string;
+    password: string;
 }
 
 export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItemBriefDto {

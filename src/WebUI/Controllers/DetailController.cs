@@ -41,7 +41,7 @@ public class DetailsController : ApiControllerBase
     public async Task<ActionResult> Delete(int id)
     {
         await Mediator.Send(new DeleteDetailCommand { Id = id });
-
+            
         return NoContent();
     }
 }

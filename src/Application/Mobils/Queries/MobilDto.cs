@@ -19,7 +19,6 @@ public class MobilDto : IMapFrom<Mobil>
 
     public Kategoriku Kategoriku {get;set;}
 
-
     public Detail Detail {get;set;}
 
 }

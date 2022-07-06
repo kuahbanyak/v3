@@ -15,7 +15,10 @@ public interface IApplicationDbContext
 
     DbSet<Detail>Details{get;}
 
+    DbSet<Pengguna>Penggunas {get;}
+    DbSet<PenggunaLogin> PenggunaLogins {get;}
 
+    DbSet<PenggunaRegister> PenggunaRegisters {get; }
     /* DbSet<MarkDto>MarkDtos {get;}
  */
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
