@@ -14,8 +14,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     public AuditableEntitySaveChangesInterceptor(
         ICurrentUserService currentUserService,
         IDateTime dateTime)
-    {
-        _currentUserService = currentUserService;
+    {        _currentUserService = currentUserService;
         _dateTime = dateTime;
     }
 

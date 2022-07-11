@@ -1,4 +1,3 @@
-
 using System.Reflection.Metadata;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -8,10 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Details.Queries.GetAllDetail;
 
-public class GetAllDetailQuery : IRequest<DetailVm>
-{
-
-}
+public record GetAllDetailQuery : IRequest<DetailVm>;
 public class GetAllDetailQueryHandler : IRequestHandler<GetAllDetailQuery, DetailVm>
 {
     private readonly IApplicationDbContext _context;

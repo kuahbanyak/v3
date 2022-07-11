@@ -103,3 +103,25 @@ public class PenggunasController : ControllerBase
         }
     }
 }
+
+
+/* using CleanArchitecture.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace  CleanArchitecture.WebUI.Controllers;
+[Route("api/[controller]")]
+[ApiController]
+public class PenggunasController : ControllerBase
+{
+    [HttpPost("Register")]
+    public async Task<ActionResult>Register (PenggunaRegister request)
+    {
+        return Ok();
+    }
+
+    [HttpPost("Login")]
+    public async Task<ActionResult> Login (PenggunaLogin request)
+    {
+        return Ok();
+    }
+} */

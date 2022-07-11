@@ -1,7 +1,16 @@
 /* 
-namespace CleanArchitecture.Application.Accounts.Commands.CreateAccount;
+using System;
+using MediatR;
 
-public class CreateAccountCommand : IRequest<int>
+namespace CleanArchitecture.Application.Penggunas.Commands.RegisterPengguna;
+
+public class RegisterCommand : IRequest<Guid>
 {
-    public string? UserName {get;set;}
-} */
+    public string Email {get; set;}
+
+    public byte [] PasswordHash {get; set;}
+
+    public byte [] PasswordSalt {get; set;}
+}
+
+public class  */
